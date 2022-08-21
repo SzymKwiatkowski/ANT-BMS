@@ -32,5 +32,9 @@ dpkg -i grafana_6.7.3_armhf.deb
 /bin/systemctl enable grafana-server
 /bin/systemctl start grafana-server
 
+wget -qO- https://repos.influxdata.com/influxdb.key | sudo tee /etc/apt/trusted.gpg.d/influxdb.asc >/dev/null
+source /etc/os-release
+echo "deb https://repos.influxdata.com/${ID} ${VERSION_CODENAME} stable" | sudo tee /etc/apt/sources.list.d/influxdb.list
+sudo apt-get update -y && sudo apt-get install telegraf -y
 
-
+apt-get install cron

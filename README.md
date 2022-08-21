@@ -26,3 +26,15 @@ and then
 ```bash
 sudo docker rm test
 ```
+
+# RPI setup
+After running installation update job in crontab using root.txt and paste the job to /etc/crontab file. After doing so check if it's running with 
+```bash
+systemctl status cron
+```
+
+After that you can check grafana setting or edit them using in:
+```bash
+nano /etc/grafana/grafana.ini
+```
+This file will enable you to specify custom settings.
