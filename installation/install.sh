@@ -21,10 +21,16 @@ python2 setup.py install
 apt-get update -y
 apt update -y
 apt-get install influxdb -y
-#apt-get install chronograf -y
-#apt-get install nodered -y
 pip install requests
 pip install serial
+
+#apt install npm
+#npm install -g --unsafe-perm node-red
+
+wget https://dl.grafana.com/oss/release/grafana_6.7.3_armhf.deb
+dpkg -i grafana_6.7.3_armhf.deb
+/bin/systemctl enable grafana-server
+/bin/systemctl start grafana-server
 
 
 
