@@ -43,9 +43,9 @@ sudo su -
 ```
 To start installation procces simply type
 ```bash
-.installation/install.sh ?
+.installation/install.sh 
 ```
-You may rest now, it will took a while. When everything is done you may leaave superuser mode by typing `exit`.
+You may rest now, it will took a while. When everything is done you may leave superuser mode by typing `exit`.
 
 
 ## Bluetooth connection
