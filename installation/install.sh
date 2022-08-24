@@ -27,8 +27,9 @@ pip install serial
 #apt install npm
 #npm install -g --unsafe-perm node-red
 
-wget https://dl.grafana.com/oss/release/grafana_6.7.3_armhf.deb
-dpkg -i grafana_6.7.3_armhf.deb
+apt-get install -y adduser libfontconfig1
+wget https://dl.grafana.com/enterprise/release/grafana-enterprise_9.1.1_arm64.deb
+dpkg -i grafana-enterprise_9.1.1_arm64.deb
 /bin/systemctl enable grafana-server
 /bin/systemctl start grafana-server
 
