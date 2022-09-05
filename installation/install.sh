@@ -23,6 +23,7 @@ apt update -y
 apt-get install influxdb -y
 pip install requests
 pip install serial
+pip install influxdb-client
 
 #apt install npm
 #npm install -g --unsafe-perm node-red
