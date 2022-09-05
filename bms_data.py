@@ -7,18 +7,29 @@ import sys
 import serial
 import bluetooth
 from bluetooth import *
+from datetime import datetime
+from influxdb_client import InfluxDBClient
+from influxdb_client.client.write_api import SYNCHRONOUS
 
 serverMACAddress = '20:A1:11:01:23:45'
 port = 1
 ser = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
-ser.connect((serverMACAddress,port))
+ser.connect((serverMACAddress, port))
 
 time.sleep(0.1)
 
 url = "your url link for uploading data"
+token = "put_your_api_token_here"
+org = "Test"
+bucket = "Pomiary"
 
-test2='5A5A5A00005A'
-test3='DBDB00000000'
+client = InfluxDBClient(url=url, token=token, org=org)
+write_api = client.write_api(write_options=SYNCHRONOUS)
+if not client.ping():
+    raise Exception("Cannot connect to server")
+
+test2 = '5A5A5A00005A'
+test3 = 'DBDB00000000'
 try:
     ser.send(test2.decode('hex'))
     time.sleep(0.005)
@@ -239,33 +250,42 @@ data_Status_balance_str=''+str(data_Status_balance)
 
 ser.close()
 
-resp = req.get(url+data_remaining_ah_str)
-resp2 = req.get(url+bms_soc_str)
-resp3 = req.get(url+bms_current_str)
-resp4 = req.get(url+bms_v_str)
-resp5 = req.get(url+cell_avg_str)
-resp6 = req.get(url+cell_min_str)
-resp7 = req.get(url+cell_max_str)
-resp8 = req.get(url+cell1_str)
-resp9 = req.get(url+cell2_str)
-resp10 = req.get(url+cell3_str)
-resp11 = req.get(url+cell4_str)
-resp12 = req.get(url+cell5_str)
-resp13 = req.get(url+cell6_str)
-resp14 = req.get(url+cell7_str)
-resp15 = req.get(url+cell8_str)
-resp16 = req.get(url+cell9_str)
-resp17 = req.get(url+cell10_str)
-resp18 = req.get(url+cell11_str)
-resp19 = req.get(url+cell12_str)
-resp20 = req.get(url+cell13_str)
-resp21 = req.get(url+cell14_str)
-resp22 = req.get(url+cell15_str)
-resp23 = req.get(url+cell16_str)
-resp24 = req.get(url+data_power_temp_str)
-resp25 = req.get(url+data_balance_temp_str)
-resp26 = req.get(url+data_cell_temp_1_str)
-resp27 = req.get(url+data_cell_temp_2_str)
-resp28 = req.get(url+data_Status_charge_str)
-resp29 = req.get(url+data_Status_discharge_str)
-resp30 = req.get(url+data_Status_balance_str)
+data = [{
+    "measurement": "Klara",
+    "tags": {"session": "test4"},
+    "fields": {
+        "remaining_ah": data_remaining_ah,
+        "SoC": bms_soc,
+        "Current": bms_current,
+        "Battery voltage 0": bms_v,
+        "Cell avg": cell_avg,
+        "Cell min": cell_min,
+        "Cell max": cell_max,
+        "Cell voltage 0": cell1,
+        "Cell voltage 1": cell2,
+        "Cell voltage 2": cell3,
+        "Cell voltage 3": cell4,
+        "Cell voltage 4": cell5,
+        "Cell voltage 5": cell6,
+        "Cell voltage 6": cell7,
+        "Cell voltage 7": cell8,
+        "Cell voltage 8": cell9,
+        "Cell voltage 9": cell10,
+        "Cell voltage 10": cell11,
+        "Cell voltage 11": cell12,
+        "Cell voltage 12": cell13,
+        "Cell voltage 13": cell14,
+        "Cell voltage 14": cell15,
+        "Cell voltage 15": cell16,
+        "Power temperature": data_power_temp,
+        "Balance temperature": data_balance_temp,
+        "Cell temperature 0": data_cell_temp_1,
+        "Cell temperature 1": data_cell_temp_2,
+        "Status charge": data_Status_charge,
+        "Status discharge": data_Status_discharge,
+        "Status balance": data_Status_balance
+    },
+    "time": datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
+}]
+
+write_api.write(bucket, org, data)
